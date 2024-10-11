@@ -33,7 +33,7 @@
           "value": {}
       },
       "vmSize": {
-        "value": "Standard_DC1s_v2"
+        "value": "Standard_DS11_v2"
       }
     }
 }
