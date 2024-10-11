@@ -60,16 +60,14 @@
       }
     },
     "vmSize": {
-      "type": "object",
-      "defaultValue": {},
+      "type": "string",
       "metadata": {
         "description": "vmSize"
       }
     }
   },
   "variables": {
-    "name": "[toLower(format('{0}', parameters('aiHubName')))]",
-    "vmSize": "Standard_DC1s_v2",
+    "name": "[toLower(format('{0}', parameters('aiHubName')))]"
     "uniqueSuffix": "[substring(uniqueString(resourceGroup().id), 0, 5)]"
   },
   "resources": [
@@ -90,7 +88,7 @@
             "value": "[parameters('computeNodeAdminUserName')]"
           },
           "vmSize": {
-            "value": "[variables('vmSize')]"
+            "value": "[parameters('vmSize')]"
           },
           "uniqueSuffix": {
             "value": "[variables('uniqueSuffix')]"
