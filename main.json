@@ -58,6 +58,13 @@
       "metadata": {
         "description": "Set of tags to apply to all resources."
       }
+    },
+    "vmSize": {
+      "type": "object",
+      "defaultValue": {},
+      "metadata": {
+        "description": "vmSize"
+      }
     }
   },
   "variables": {
