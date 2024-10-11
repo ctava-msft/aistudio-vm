@@ -67,7 +67,7 @@
     }
   },
   "variables": {
-    "name": "[toLower(format('{0}', parameters('aiHubName')))]"
+    "name": "[toLower(format('{0}', parameters('aiHubName')))]",
     "uniqueSuffix": "[substring(uniqueString(resourceGroup().id), 0, 5)]"
   },
   "resources": [
