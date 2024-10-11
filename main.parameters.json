@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "adminUsername": {
+        "value": "GEN-UNIQUE"
+      },
+      "adminPasswordOrKey": {
+        "value": "GEN-PASSWORD"
+      },
+      "aiHubFriendlyName": {
+        "value": "AIHubPrivate"
+      },
+      "aiHubDescription": {
+        "value": "This AI hub has publicNetworkAccess: disabled. Its compute is also behind a private VNET."
+      },
+      "aiHubName": {
+          "value": "AIHubPrivate"
+      },
+      "computeNodeAdminUserName": {
+        "value": "<redacted>"
+      },
+      "computeNodeAdminPassword": {
+        "value": "<redacted>"
+      },
+      "dnsLabelPrefix": {
+        "value": "GEN-UNIQUE"
+      },
+      "location": {
+          "value": "eastus"
+      },
+      "tags":{
+          "value": {}
+      }
+    }
+}

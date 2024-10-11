@@ -1,0 +1,133 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.28.1.47646",
+      "templateHash": "3744771261089865330"
+    }
+  },
+  "parameters": {
+    "aiServicesId": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource ID of the AI Services resource"
+      }
+    },
+    "aiServicesTarget": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource ID of the AI Services endpoint"
+      }
+    },
+    "aiHubName": {
+      "type": "string",
+      "metadata": {
+        "description": "AI hub name"
+      }
+    },
+    "aiHubFriendlyName": {
+      "type": "string",
+      "defaultValue": "[parameters('aiHubName')]",
+      "metadata": {
+        "description": "AI hub display name"
+      }
+    },
+    "aiHubDescription": {
+      "type": "string",
+      "metadata": {
+        "description": "AI hub description"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure region of the deployment"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "metadata": {
+        "description": "Tags to add to the resources"
+      }
+    },
+    "keyVaultId": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource ID of the key vault resource for storing connection strings"
+      }
+    },
+    "storageAccountId": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource ID of the storage account resource for storing experimentation outputs"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.MachineLearningServices/workspaces/connections",
+      "apiVersion": "2024-01-01-preview",
+      "name": "[format('{0}/{1}', parameters('aiHubName'), format('{0}-connection-AzureOpenAI', parameters('aiHubName')))]",
+      "properties": {
+        "category": "AzureOpenAI",
+        "target": "[parameters('aiServicesTarget')]",
+        "authType": "ApiKey",
+        "isSharedToAll": true,
+        "credentials": {
+          "key": "[format('{0}', listKeys(parameters('aiServicesId'), '2021-10-01').key1)]"
+        },
+        "metadata": {
+          "ApiType": "Azure",
+          "ResourceId": "[parameters('aiServicesId')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.MachineLearningServices/workspaces', parameters('aiHubName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.MachineLearningServices/workspaces/computes",
+      "apiVersion": "2024-01-01-preview",
+      "name": "[format('{0}/{1}', parameters('aiHubName'), format('{0}-computeNode', parameters('aiHubName')))]",
+      "properties": {
+        "computeType": "ComputeInstance",
+        "properties": {
+          "enableNodePublicIp": false,
+          "vmSize": "Standard_DC1s_v2"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.MachineLearningServices/workspaces', parameters('aiHubName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.MachineLearningServices/workspaces",
+      "apiVersion": "2023-10-01",
+      "name": "[parameters('aiHubName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "friendlyName": "[parameters('aiHubFriendlyName')]",
+        "description": "[parameters('aiHubDescription')]",
+        "keyVault": "[parameters('keyVaultId')]",
+        "storageAccount": "[parameters('storageAccountId')]",
+        "managedNetwork": {
+          "isolationMode": "Enabled"
+        },
+        "publicNetworkAccess": "Disabled"
+      },
+      "kind": "hub"
+    }
+  ],
+  "outputs": {
+    "aiHubID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.MachineLearningServices/workspaces', parameters('aiHubName'))]"
+    }
+  }
+}
